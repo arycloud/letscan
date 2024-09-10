@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Scanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/scan_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/scan_elements.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>LetScan Port Scanner Tool</h1>
+        </header>
+
+        <section>
+            
+            <form id="port-scan-form">
+                <div class="form-group" style="margin-bottom: 3%;">
+                    {% if current_user.is_authenticated %}
+                You are logged in as {{ current_user.email }}!
+                <a href="{{ url_for("logout") }}" class="button">Logout</a>
+            {% endif %}
+                </div>
+                <div class="form-group">
+                    <div class="wave-group">
+                        <input required="" id="target" name="target" type="text" class="input" placeholder="Target IP/Domain">
+                        <span class="bar"></span>
+                        <!-- <label class="label">
+                            <span class="label-char" style="--index: 0">Ta</span>
+                            <span class="label-char" style="--index: 1">rg</span>
+                            <span class="label-char" style="--index: 2">et</span>
+                            <span class="label-char" style="--index: 3"> </span>
+                            <span class="label-char" style="--index: 0">IP</span>
+                            <span class="label-char" style="--index: 1">/</span>
+                            <span class="label-char" style="--index: 2">D</span>
+                            <span class="label-char" style="--index: 3">o</span>
+                            <span class="label-char" style="--index: 3">m</span>
+                            <span class="label-char" style="--index: 3">a</span>
+                            <span class="label-char" style="--index: 3">i</span>
+                            <span class="label-char" style="--index: 3">n</span>
+                        </label> -->
+                        <span id="error-message" style="color: red; display: none; width:90%; margin:0 auto; padding-top:1%">
+                            Invalid IP or Domain format.</span>
+                    </div>
+                </div>
+
+                <div class="inner-container">
+                    <div class="form-group">
+                        <label class="custom-label">Scan Type:</label>
+                        <div class="custom-radio">
+                            <input type="radio" value="tcp" id="radio-1" name="scan_type" checked>
+                            <label class="radio-label" for="radio-1">
+                                <div class="radio-circle"></div>
+                                <span class="radio-text">TCP</span>
+                            </label>
+                            <input type="radio" value="udp" id="radio-2" name="scan_type">
+                            <label class="radio-label" for="radio-2">
+                                <div class="radio-circle"></div>
+                                <span class="radio-text">UDP</span>
+                            </label>
+                            <input type="radio" value="syn" id="radio-3" name="scan_type">
+                            <label class="radio-label" for="radio-3">
+                                <div class="radio-circle"></div>
+                                <span class="radio-text">SYN</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group" style="margin-top:2%"> -->
+                        <label class="form-switch">
+                        <input type="checkbox" name="os-detection" id="os_detection">
+                        <i></i>
+                        OS Detection 
+                        </label>
+                        <span id="os_warning" style="display: none; font-size: medium; color: rgb(251, 183, 23);">
+                            ( Not guaranteed & a bit slow )</span>
+                    <!-- </div> -->
+                    <div class="form-group" style="margin-top:2%">
+                        <label class="custom-label">Port Options:</label>
+                        <div class="custom-radio">
+                            <input type="radio" value="common" id="common_ports" name="port_option" checked>
+                            <label class="radio-label" for="common_ports">
+                                <div class="radio-circle"></div>
+                                <span class="radio-text">Common Ports</span>
+                            </label>
+                            <input type="radio" value="custom" id="custom_ports" name="port_option">
+                            <label class="radio-label" for="custom_ports">
+                                <div class="radio-circle"></div>
+                                <span class="radio-text">My own list of ports</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    
+                    <div class=" terms-checkbox">
+                        <input type="checkbox" id="agreeCheckbox" name="agree" required>
+                        <label for="agreeCheckbox">
+                            I am authorized to scan this target and I agree with the 
+                            <a href="{{ url_for('tos') }}" target="_blank">Terms of Service</a>.
+                        </label>
+                    </div>
+                    
+                    
+                    <div id="custom-port-input" class="form-group" style="display: none;">
+                        <div class="wave-group">
+                            <label for="ports_to_scan">List of ports:</label>
+                            <input id="ports_to_scan" name="ports_to_scan" type="text" class="input" placeholder="Enter ports, e.g., 80,443,8080">
+                            <span class="bar"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" id="start-scan" class="scan-btn">Start Scan</button>
+            </form>
+        </section>
+
+        <section id="results">
+            <h2>Scan Results</h2>
+            <div>
+                <div id="spinner" style="display: none;">
+                    <!-- Spinner HTML/CSS -->
+                    <img src="static/img/spinner.gif" class="spinner">
+                </div>
+
+                 <!-- new tabs setup: -->
+                 <div class="tabs">
+                    <input type="radio" id="tab1" name="tab-control" checked>
+                    <input type="radio" id="tab2" name="tab-control">
+                    <input type="radio" id="tab3" name="tab-control">
+                    <ul>
+                        <li title="Tab 1" class="tab active">
+                            <label for="tab1" role="button">
+                                <span>Raw Output</span>
+                            </label>
+                        </li>
+                        <li title="Tab 2" class="tab"><label for="tab2" role="button"><span>Scan Parameters</span></label></li>
+                        <li title="Tab 3" class="tab"><label for="tab3" role="button"><span>Scan Summary</span></label></li>
+                    </ul>
+                    <div class="content">
+                        <section style="width: 90%;margin: 1% auto;">
+                            <table id="raw-output"></table>
+                        </section>
+                        <section id="scan-parameters" style="width: 90%;margin: 1% auto;">
+                            <table id="parameters-output"></table>
+                        </section>
+                        <section id="scan-summary" style="width: 90%;margin: 1% auto;">
+                            <input type="text" id="search-bar" class="search-bar" placeholder="Search by port...">
+                            <table class="scan-summary-table" id="summary-table">
+                                <thead>
+                                    <tr>
+                                        <th>Host</th>
+                                        <th>Port</th>
+                                        <th>State</th>
+                                        <th>Service Name</th>
+                                        <th>Protocol</th>
+                                        <th>OS Information</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="summary-tbody">
+                                <!--    Table rows will be added dynamically -->
+                                </tbody>
+                            </table>
+                        </section>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    
+    </div>
+    <!-- Start Footer bottom Area -->
+    <footer>
+        <div class="footer-area-bottom">
+        <div>
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+            <div class="row">
+            <div class="col-md-12">
+                <div class="credits">
+                <p>
+                    &copy; Copyright 2024. | <strong><a href="#">Abdul Rehman </a></strong>
+                         | All Rights Reserved. 
+                         | Found it on <a href="#">Github</a>
+                </p>
+                </div>
+                <div class="copyright text-center">
+                
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </footer>
+    <script src="static/js/script.js"></script>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <script>
+        // Get the input field and error message element
+        const targetInput = document.getElementById('target');
+        const errorMessage = document.getElementById('error-message');
+
+        // Regular expressions for validating IPv4 and domain
+        const ipv4Pattern = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        const domainPattern = /^(?!www\.|http:\/\/|https:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+
+        // Add event listener to validate while typing
+        targetInput.addEventListener('input', function() {
+            const targetValue = targetInput.value.trim();
+            
+            // Validate against both patterns (IP and Domain)
+            if (!ipv4Pattern.test(targetValue) && !domainPattern.test(targetValue)) {
+                errorMessage.style.display = 'block';  // Show error message if invalid
+            } else {
+                errorMessage.style.display = 'none';   // Hide error message if valid
+            }
+        });
+
+        
+        document.addEventListener('DOMContentLoaded', function () {
+        const osDetectionCheckbox = document.getElementById('os_detection');
+        const osWarningText = document.getElementById('os_warning');
+        
+        // Check the checkbox state on load (if it's checked by default)
+        if (osDetectionCheckbox.checked) {
+            osWarningText.style.display = 'inline';  // Show the warning if checkbox is pre-checked
+        }
+
+        // Add event listener to toggle the warning text
+        osDetectionCheckbox.addEventListener('change', function () {
+            if (osDetectionCheckbox.checked) {
+                osWarningText.style.display = 'inline';  // Show the text when checked
+            } else {
+                osWarningText.style.display = 'none';  // Hide the text when unchecked
+            }
+        });
+    });
+
+        
+        const spinner = document.getElementById('spinner');
+        console.log('Spinner element:', spinner);
+        const parametersOutput = document.getElementById('parameters-output');
+        const summaryTableBody = document.getElementById('summary-tbody');
+        const rawOutput = document.getElementById('raw-output');
+        const form = document.getElementById('port-scan-form')
+
+        // Function to disable the form
+        function disableForm() {
+            const inputs = form.querySelectorAll('input, button, select, textarea');
+            inputs.forEach(input => {
+                input.disabled = true;
+            });
+        }
+
+        // Function to enable the form
+        function enableForm() {
+            const inputs = form.querySelectorAll('input, button, select, textarea');
+            inputs.forEach(input => {
+                input.disabled = false;
+            });
+        }
+        
+        function showSpinner() {
+            console.log('Showing spinner');
+            if (spinner) {
+                spinner.style.display = 'block'; // Show spinner
+                disableForm();
+            }
+        }
+
+        function hideSpinner() {
+            console.log('Hiding spinner');
+            if (spinner) {
+                spinner.style.display = 'none'; // Hide spinner
+                enableForm();
+            }
+        }
+
+        const socket = io(); // Initialize socket.io
+
+        // socket.on('scan_complete', function (data) {
+        //     console.log("Received scan_complete event:", data);
+        //     hideSpinner();  // Ensure the spinner is hidden
+        //     // Process scan results here
+        // });
+        socket.on('scan_complete', function (data) {
+            console.log("Received scan_complete event:", data);
+            hideSpinner();
+            
+            // if (parametersOutput) {
+            //     parametersOutput.innerHTML = `
+            //         <h2>Scan Parameters</h2>
+            //         Target: ${data.summary.host} <br>
+            //         Scan Type: ${data.scan_type || 'N/A'} <br>
+            //         All Hosts: ${data.summary.hosts || 'N/A'} <br>
+            //         Ports: ${data.summary.raw_ports || 'N/A'}
+            //     `;
+            // }
+
+            if (summaryTableBody) {
+                summaryTableBody.innerHTML = '';
+                let osInfo = 'No OS information available';
+                if (data.summary && data.summary.os && Array.isArray(data.summary.os) && data.summary.os.length > 0) {
+                    // Construct the OS info text
+                    osInfo = data.summary.os.map(osEntry => {
+                        return `${osEntry.osfamily || 'Unknown'} (Gen: ${osEntry.osgen || 'Unknown'}) - Accuracy: ${osEntry.accuracy || 'Unknown'}%`;
+                    }).join(', '); // Join multiple OS entries with commas
+                }
+                if (data.summary && data.summary.ports) {
+                    data.summary.ports.forEach(port => {
+                        const dotClass = port.state === 'open' ? 'green-dot' : 'red-dot';
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${data.summary.host || 'N/A'}</td>
+                            <td>${port.port || 'N/A'}</td>
+                            <td>
+                                <div class="dot ${dotClass}"></div>
+                                ${port.state || 'N/A'}
+                            </td>
+                            <td>${port.service || 'N/A'}</td>
+                            <td>${port.protocol || 'N/A'}</td>
+                            <td>${osInfo}</td>
+
+                            
+                        `;
+                        summaryTableBody.appendChild(row);
+                    });
+                }
+            }
+        });
+    
+
+        socket.on('scan_error', function (data) {
+        console.log("Received scan_error event:", data);
+        hideSpinner();
+        rawOutput.innerText += `Error: ${data.error}\n`;
+        });
+
+
+        // Search functionality for the scan summary table
+        document.getElementById('search-bar').addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase();
+            const rows = summaryTableBody.getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let match = false;
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].innerText.toLowerCase().includes(searchTerm)) {
+                        match = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = match ? '' : 'none';
+            }
+        });
+        
+    </script>
+    <script src="static/js/result_tabs.js"></script>
+    <script>
+        
+        // document.cookie.split(";").forEach(function(c) { 
+        //     document.cookie = c.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        // });
+    </script>
+</body>
+</html>
