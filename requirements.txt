@@ -1,5 +1,5 @@
 bidict==0.22.1
-blinker==1.8.2
+blinker==1.6.3
 certifi==2024.8.30
 charset-normalizer==3.3.2
 click==8.1.7
