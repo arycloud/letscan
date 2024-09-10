@@ -92,16 +92,6 @@
                         </div>
                     </div>
 
-                    
-                    <div class=" terms-checkbox">
-                        <input type="checkbox" id="agreeCheckbox" name="agree" required>
-                        <label for="agreeCheckbox">
-                            I am authorized to scan this target and I agree with the 
-                            <a href="{{ url_for('tos') }}" target="_blank">Terms of Service</a>.
-                        </label>
-                    </div>
-                    
-                    
                     <div id="custom-port-input" class="form-group" style="display: none;">
                         <div class="wave-group">
                             <label for="ports_to_scan">List of ports:</label>
@@ -109,6 +99,14 @@
                             <span class="bar"></span>
                         </div>
                     </div>
+                    <div class=" terms-checkbox"></div>
+                        <input type="checkbox" id="agreeCheckbox" name="agree" required>
+                        <label for="agreeCheckbox">
+                            I am authorized to scan this target and I agree with the 
+                            <a href="{{ url_for('tos') }}" target="_blank">Terms of Service</a>.
+                        </label>
+                    </div>
+
                 </div>
                 
                 <button type="submit" id="start-scan" class="scan-btn">Start Scan</button>
