@@ -21,7 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Initialize socket connection
-    const socket = io.connect('http://' + document.domain + ':' + location.port);
+    // # for local devlopment
+    // const socket = io.connect('http://' + document.domain + ':' + location.port);
+    // for production
+    const socket = io('https://letscan.io', { transports: ['websocket', 'polling'] });
     socket.on('connect', function() {
         console.log('Socket connected');
     });

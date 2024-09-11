@@ -109,7 +109,7 @@
                     <button type="submit" id="start-scan" class="scan-btn">Start Scan</button>
                 </div>
                 
-                
+                <button type="submit" id="start-scan" class="scan-btn">Start Scan</button>
             </form>
         </section>
 
@@ -276,7 +276,8 @@
             }
         }
 
-        const socket = io(); // Initialize socket.io
+        // const socket = io(); // Initialize socket.io
+        const socket = io('https://letscan.io', { transports: ['websocket', 'polling'] });
 
         // socket.on('scan_complete', function (data) {
         //     console.log("Received scan_complete event:", data);
