@@ -1,14 +1,13 @@
 import os
 
-
 class Config(object):
-    SECRET_KEY = os.environ.get("FLASK_SECRET_KEY") or "supersekrit"
+    SECRET_KEY = os.environ.get("FLASK_SECRET_KEY", "default_secret_key")
 
-    # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or "sqlite:///app.sqlite3"
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or "sqlite:////home/abdul/LetScan/letscan/instance/app.sqlite3"
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///instance/app.sqlite3")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    GOOGLE_OAUTH_CLIENT_ID = '726773540164-feratonqe02cnho2in1nn451kub737as.apps.googleusercontent.com'
-    GOOGLE_OAUTH_CLIENT_SECRET = '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'
-    OAUTHLIB_INSECURE_TRANSPORT = '1'
-    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-    os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
+
+    GOOGLE_OAUTH_CLIENT_ID = os.environ.get("GOOGLE_OAUTH_CLIENT_ID", "default_client_id")
+    GOOGLE_OAUTH_CLIENT_SECRET = os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET", "default_client_secret")
+
+    OAUTHLIB_INSECURE_TRANSPORT = os.environ.get('OAUTHLIB_INSECURE_TRANSPORT', '1')
+    OAUTHLIB_RELAX_TOKEN_SCOPE = os.environ.get('OAUTHLIB_RELAX_TOKEN_SCOPE', '1')
