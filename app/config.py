@@ -3,7 +3,7 @@ import os
 class Config(object):
     SECRET_KEY = os.environ.get("FLASK_SECRET_KEY", "default_secret_key")
     SESSION_COOKIE_SECURE = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///instance/app.sqlite3")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     GOOGLE_OAUTH_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "default_client_id")
