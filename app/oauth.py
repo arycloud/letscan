@@ -14,7 +14,7 @@ from .models import db, User, OAuth
 blueprint = make_google_blueprint(
     # client_id="my-key-here",
     # client_secret="my-secret-here",
-    scope=["openid", "profile", "email"],
+    scope=["openid", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"],
     storage=SQLAlchemyStorage(OAuth, db.session, user=current_user),
 )
 
