@@ -143,6 +143,42 @@ footer {
     margin-top: auto; /* Push footer to the bottom of the page */
 }
 
+/* Terms Content Section */
+.terms-content {
+    padding: 40px 20px;
+    background-color: #f8f8f8;
+    color: black;
+}
+
+.terms-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.terms-container h2 {
+    font-size: 24px;
+    margin-top: 20px;
+    color: #333;
+}
+
+.terms-container p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.terms-container a {
+    color: #ffc107;
+    text-decoration: none;
+}
+
+.terms-container a:hover {
+    text-decoration: underline;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero h1 {

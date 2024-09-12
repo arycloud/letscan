@@ -75,10 +75,10 @@ def index():
 
 
 @app.route("/scan")
-# @login_required
+@login_required
 def scan():
-    # if not google.authorized:
-    #     return redirect(url_for("google.login"))
+    if not google.authorized:
+        return redirect(url_for("google.login"))
     return render_template("scan.html")
 
 
