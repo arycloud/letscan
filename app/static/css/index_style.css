@@ -1,63 +1,79 @@
+/* Global Styles */
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     background-color: #736f6f;
     color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the body takes up at least the full viewport height */
 }
 
-/* Hero Section */
+h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
 /* Hero Section */
 .hero {
     background-color: #ffc107;
     padding: 60px 20px;
     text-align: center;
     color: black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
-
+.hero-logo {
+    max-width: 200px;
+    margin-bottom: 20px;
+}
 
 .hero h1 {
-    font-size: 48px;
+    font-size: 2.5rem;
     margin-bottom: 20px;
 }
 
 .hero p {
-    font-size: 20px;
+    font-size: 1.2rem;
     max-width: 600px;
     margin: 0 auto;
 }
 
-.hero .cta-button {
+.cta-button {
     background-color: black;
     color: #ffc107;
     padding: 15px 30px;
-    font-size: 20px;
-    text-decoration: none;
+    font-size: 1.2rem;
     border-radius: 5px;
     margin-top: 20px;
     display: inline-block;
 }
 
-.hero .cta-button:hover {
+.cta-button:hover {
     background-color: #333;
-    color: #ffc107;
 }
 
-/* Side-by-Side Color Differentiation */
+/* Info and Features Section */
 .info-feature-section {
     display: flex;
-    justify-content: space-around;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 20px;
     padding: 30px 20px;
+    justify-content: space-between; /* Ensure side-by-side alignment */
 }
 
 .info-feature {
+    flex: 1 1 45%; /* Keep them side by side on large screens */
     padding: 40px;
-    width: 45%;
+    box-sizing: border-box; /* Ensure padding and border are included in the element’s total width and height */
 }
 
 .info-feature:nth-child(1) {
@@ -68,19 +84,19 @@ body {
 .info-feature:nth-child(2) {
     background-color: #8c8888;
     color: white;
-    border:solid 2px #ffc107;
+    border: solid 2px #ffc107;
 }
 
 .info-feature h2 {
-    font-size: 28px;
+    font-size: 1.8rem;
     margin-bottom: 20px;
 }
 
 .info-feature p {
-    font-size: 18px;
+    font-size: 1rem;
 }
 
-/* Login Button */
+/* Login Section */
 .login-section {
     background-color: #ffc107;
     padding: 50px 20px;
@@ -89,23 +105,33 @@ body {
 }
 
 .login-section h2 {
-    font-size: 32px;
+    font-size: 2rem;
     margin-bottom: 20px;
 }
 
-.login-button {
+.login-button, .google-button {
     background-color: black;
     color: #ffc107;
     padding: 15px 30px;
-    font-size: 20px;
-    text-decoration: none;
+    font-size: 1.2rem;
     border-radius: 5px;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
 
-.login-button:hover {
-    background-color: #333;
-    color: #ffc107;
+.google-button {
+    background-color: #4285F4; /* Google Blue */
+    color: white;
+}
+
+.google-button:hover {
+    background-color: #357AE8;
+}
+
+.login-button i, .google-button i {
+    margin-right: 10px;
 }
 
 /* Footer */
@@ -114,45 +140,58 @@ footer {
     color: #ffc107;
     text-align: center;
     padding: 20px 0;
+    margin-top: auto; /* Push footer to the bottom of the page */
 }
 
-footer p {
-    margin: 0;
-    font-size: 14px;
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .cta-button {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .info-feature-section {
+        flex-direction: column; /* Stack vertically on smaller screens */
+        align-items: center;
+    }
+
+    .info-feature {
+        width: 100%;
+        max-width: 600px; /* Ensure sections don't become too wide on smaller screens */
+    }
+
+    .info-feature h2 {
+        font-size: 1.6rem;
+    }
+
+    .info-feature p {
+        font-size: 0.9rem;
+    }
 }
 
-/* Terms Content Section */
-.terms-content {
-    padding: 40px 20px;
-    background-color: #f8f8f8;
-    color: black;
-}
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
 
-.terms-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
+    .cta-button {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
 
-.terms-container h2 {
-    font-size: 24px;
-    margin-top: 20px;
-    color: #333;
-}
+    .info-feature h2 {
+        font-size: 1.5rem;
+    }
 
-.terms-container p {
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-.terms-container a {
-    color: #ffc107;
-    text-decoration: none;
-}
-
-.terms-container a:hover {
-    text-decoration: underline;
+    .info-feature p {
+        font-size: 0.9rem;
+    }
 }

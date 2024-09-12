@@ -5,43 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Port Scanner App - Secure Your Network</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- Hero Section -->
     <section class="hero">
         {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        <div class="flash-messages error-box form-group wave-group ">
-                            {% for category, message in messages %}
-                                {% if category != "info" or request.referrer %}
-                                    <div class="alert {{ category }}" style="text-align: center;">{{ message }}</div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                {% endwith %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        {% if category != "info" or request.referrer %}
+                            <div class="alert {{ category }}">{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         <img src="{{ url_for('static', filename='img/logo.png') }}" alt="LetScan Logo" class="hero-logo">
         <h1>Welcome to LetScan Port Scanner</h1>
         <p>Ensure your network security by detecting open and closed ports quickly and efficiently.</p>
         {% if current_user.is_authenticated %}
             <a href="{{ url_for('scan') }}" class="cta-button">Start Scanning Now</a>
         {% else %}
-        <a href="{{ url_for('google.login') }}" class="cta-button">Login to Scan</a>
+        <a href="{{ url_for('google.login') }}" class="cta-button"><i class="fab fa-google"> </i> Login to Scan </i></a>
         {% endif %}
     </section>
 
-    <!-- Side-by-Side Info and Feature Section with Color Differentiation -->
+    <!-- Info and Features Section -->
     <section class="info-feature-section">
-        <!-- Info Section -->
         <div class="info-feature">
             <h2>What is Port Scanning?</h2>
-            <p>Port scanning is a technique used to identify open ports and services available on a host. This helps network administrators find potential vulnerabilities and ensure the safety of their network.</p>
+            <p>Port scanning is a technique used to identify open ports and services on a host. It helps administrators ensure the safety of their network.</p>
         </div>
 
-        <!-- Features Section -->
         <div class="info-feature">
             <h2>How This App Works</h2>
-            <p>Our app leverages the power of Nmap to quickly scan and analyze your network for open ports. Simply log in, enter your target IP or domain, and let the scanner do the rest. No complicated setup required.</p>
+            <p>Our app uses Nmap to quickly scan and analyze your network for open ports. Just log in, enter your target IP, and let the scanner do the rest.</p>
         </div>
     </section>
 
@@ -49,11 +48,11 @@
     <section id="login" class="login-section">
         <h2>Ready to Scan Your Network?</h2>
         {% if current_user.is_authenticated %}
-        <p>You are already logged in as: <b>{{ current_user.email }}!</b> </p>
-        <a href="{{ url_for('scan') }}" class="login-button">Start Scanning</a>
+            <p>You are logged in as: <b>{{ current_user.email }}!</b></p>
+            <a href="{{ url_for('scan') }}" class="login-button">Start Scanning</a>
         {% else %}
-        <p>Login to start scanning your network and ensure its security.</p>
-        <a href="{{ url_for('google.login') }}" class="login-button">Log in</a>
+            <p>Login to start scanning and ensure your network's security.</p>
+            <a href="{{ url_for('google.login') }}" class="cta-button"><i class="fab fa-google"> </i> Login with Google </i></a>
         {% endif %}
     </section>
 
@@ -61,6 +60,5 @@
     <footer>
         <p>&copy; 2024 LetScan. All rights reserved.</p>
     </footer>
-
 </body>
 </html>

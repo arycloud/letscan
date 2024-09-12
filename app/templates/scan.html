@@ -10,11 +10,10 @@
 <body>
     <div class="container">
         <header>
-            <h1>LetScan Port Scanner Tool</h1>
+            <h1><a href="{{url_for('index')}}" style="text-decoration: none; color:#d6ac05"> LetScan </a> Port Scanner Tool</h1>
         </header>
 
         <section>
-            
             <form id="port-scan-form">
                 <div class="form-group" style="margin-bottom: 3%;">
                     {% if current_user.is_authenticated %}
@@ -26,26 +25,12 @@
                     <div class="wave-group">
                         <input required="" id="target" name="target" type="text" class="input" placeholder="Target IP/Domain">
                         <span class="bar"></span>
-                        <!-- <label class="label">
-                            <span class="label-char" style="--index: 0">Ta</span>
-                            <span class="label-char" style="--index: 1">rg</span>
-                            <span class="label-char" style="--index: 2">et</span>
-                            <span class="label-char" style="--index: 3"> </span>
-                            <span class="label-char" style="--index: 0">IP</span>
-                            <span class="label-char" style="--index: 1">/</span>
-                            <span class="label-char" style="--index: 2">D</span>
-                            <span class="label-char" style="--index: 3">o</span>
-                            <span class="label-char" style="--index: 3">m</span>
-                            <span class="label-char" style="--index: 3">a</span>
-                            <span class="label-char" style="--index: 3">i</span>
-                            <span class="label-char" style="--index: 3">n</span>
-                        </label> -->
                         <span id="error-message" style="color: red; display: none; width:90%; margin:0 auto; padding-top:1%">
                             Invalid IP or Domain format.</span>
                     </div>
                 </div>
 
-                <div class="inner-container">
+                    <div class="inner-container">
                     <div class="form-group">
                         <label class="custom-label">Scan Type:</label>
                         <div class="custom-radio">
@@ -99,7 +84,7 @@
                             <span class="bar"></span>
                         </div>
                     </div>
-                    <div class=" terms-checkbox"></div>
+                    <div class="terms-checkbox">
                         <input type="checkbox" id="agreeCheckbox" name="agree" required>
                         <label for="agreeCheckbox">
                             I am authorized to scan this target and I agree with the 
@@ -111,7 +96,7 @@
             </form>
         </section>
 
-        <section id="results">
+        <div id="results">
             <h2>Scan Results</h2>
             <div>
                 <div id="spinner" style="display: none;">
@@ -164,7 +149,7 @@
                 </div>
 
             </div>
-        </section>
+        </div>
     
     </div>
     <!-- Start Footer bottom Area -->
